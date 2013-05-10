@@ -80,6 +80,26 @@
             }
           );
         });
+
+        function postLike() {
+          FB.api(
+             'https://graph.facebook.com/me/og.likes',
+             'post',
+             { object: objectToLike,
+               privacy: {'value': 'SELF'} },
+             function(response) {
+               if (!response) {
+                 alert('Error occurred.');
+               } else if (response.error) {
+                 document.getElementById('result').innerHTML = 'Error: ' + response.error.message;
+               } else {
+                 document.getElementById('result').innerHTML =
+                   '<a href=\"https://www.facebook.com/me/activity/' + response.id + '\">' +
+                   'Story created.  ID is ' + response.id + '</a>';
+               }
+             }
+          );
+        }
       });
     </script>
 
@@ -111,7 +131,7 @@
           // window.location.reload() because if this is in a canvas there was a
           // post made to this page and a reload will trigger a message to the
           // user asking if they want to send data again.
-          // window.location = window.location;
+          window.location = window.location;
         });
 
         FB.Canvas.setAutoGrow();
@@ -261,6 +281,12 @@
           <p>Let users find and connect to their friends in mobile apps and games. <fb:name uid="$tagger" capitalize="true" /></p>
         </li>
       </ul>
+
+      <div>
+        <input type="button" value="Create a story with an og.likes action" onclick="postLike();">
+      </div>
+      <div id="result"></div>
+
       <div class="fb-comments" data-href="https://serene-wave-3381.herokuapp.com" data-width="700" data-num-posts="10"></div>
       <div class="fb-activity" data-width="300" data-height="300" data-header="true" data-recommendations="false"></div>
       <div class="fb-shared-activity" data-width="300" data-height="300"></div>
